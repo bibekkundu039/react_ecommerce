@@ -1,9 +1,7 @@
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import axios from "axios";
-import { useAuth } from "../../zustand/useAuth";
+import { useAuth } from "../zustand/useAuth";
 
 const schema = Yup.object({
   email: Yup.string()
@@ -28,7 +26,7 @@ const schema = Yup.object({
     ),
 });
 
-const AdminLogin = () => {
+const Login = () => {
   const { login } = useAuth();
 
   const formik = useFormik({
@@ -115,4 +113,4 @@ const AdminLogin = () => {
   );
 };
 
-export default AdminLogin;
+export default Login;
