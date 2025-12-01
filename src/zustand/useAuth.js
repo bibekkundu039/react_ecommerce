@@ -9,13 +9,30 @@ export const useAuth = create(
   persist(
     (set) => ({
       user: null,
+      signup: async (values) => {
+        try {
+          const res = await axios.post("/auth/signup", values);
+          toast.success("Signup successful", { position: "top-center" });
+          set({ user: res.data });
+          setTimeout(() => {
+            window.location.replace("/");
+          }, 2000);
+          console.log("Signup successful:", res.data);
+        } catch (error) {
+          toast.error("Signup failed: " + error.response.data.message, {
+            position: "top-center",
+          });
+        }
+      },
       login: async (values) => {
         try {
           const res = await axios.post("/auth/login", values);
-          toast.success("Login successful", { position: "top-center" });
           set({ user: res.data });
+          toast.success("Login successful", { position: "top-center" });
           setTimeout(() => {
-            window.location.replace("/admin/dashboard");
+            if (res.data.role === "admin")
+              window.location.replace("/admin/dashboard");
+            else window.location.replace("/");
           }, 2000);
         } catch (error) {
           console.error("Login failed:", error);
@@ -28,6 +45,9 @@ export const useAuth = create(
       logout: () => {
         toast.info("Logged out successfully", { position: "top-center" });
         set({ user: null });
+        setTimeout(() => {
+          window.location.replace("/login");
+        }, 1000);
       },
     }),
     { name: "auth" }

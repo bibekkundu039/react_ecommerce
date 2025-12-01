@@ -18,18 +18,10 @@ import { Dropdown, Avatar, Badge, Popconfirm } from "antd";
 import { href, Link, Outlet } from "react-router-dom";
 import { useAuth } from "../../zustand/useAuth";
 
-const Layout = () => {
+const UserLayout = () => {
   const [space, setSpace] = useState(270);
   const { logout } = useAuth();
   const items = [
-    {
-      key: "1",
-      label: "Dashboard",
-      icon: <LayoutDashboard className="size-4" />,
-    },
-    {
-      type: "divider",
-    },
     {
       key: "settings",
       label: "Settings",
@@ -44,28 +36,18 @@ const Layout = () => {
 
   const menus = [
     {
-      label: "Dashboard",
-      href: "/admin/dashboard",
-      icon: <Axis3D className="size-4" />,
-    },
-    {
-      label: "Customers",
-      href: "/admin/customers",
+      label: "Carts",
+      href: "/user/carts",
       icon: <User className="size-4" />,
     },
     {
       label: "Orders",
-      href: "/admin/orders",
+      href: "/user/orders",
       icon: <ListOrdered className="size-4" />,
     },
     {
-      label: "Products",
-      href: "/admin/products",
-      icon: <ShoppingBag className="size-4" />,
-    },
-    {
       label: "Settings",
-      href: "/admin/settings",
+      href: "/user/settings",
       icon: <Settings2 className="size-4" />,
     },
   ];
@@ -146,4 +128,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default UserLayout;

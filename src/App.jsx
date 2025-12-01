@@ -11,15 +11,31 @@ import Customers from "./components/admin/Customers";
 import Orders from "./components/admin/Orders";
 import Products from "./components/admin/Products";
 import Settings from "./components/admin/Settings";
+import ErrorPage from "./components/ErrorPage";
+import Signup from "./components/Signup";
+import Home from "./components/Home";
+import UserLayout from "./components/user/UserLayout";
+import UserCarts from "./components/user/Carts";
+import UserOrders from "./components/user/UserOrders";
+import UserSettings from "./components/user/UserSettings";
 
 const App = () => {
   const router = createBrowserRouter([
     {
+      path: "/",
+      element: <Home />,
+    },
+    {
       element: <AuthGuard />,
+      errorElement: <ErrorPage />,
       children: [
         {
           path: "login",
           element: <Login />,
+        },
+        {
+          path: "signup",
+          element: <Signup />,
         },
         {
           path: "admin",
@@ -44,6 +60,25 @@ const App = () => {
             {
               path: "settings",
               element: <Settings />,
+            },
+          ],
+        },
+
+        {
+          path: "user",
+          element: <UserLayout />,
+          children: [
+            {
+              path: "carts",
+              element: <UserCarts />,
+            },
+            {
+              path: "orders",
+              element: <UserOrders />,
+            },
+            {
+              path: "settings",
+              element: <UserSettings />,
             },
           ],
         },

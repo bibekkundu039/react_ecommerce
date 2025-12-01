@@ -38,12 +38,31 @@ const AuthGuard = () => {
     );
   }
 
+  if (location.pathname === "/signup") {
+    return <Outlet />;
+  }
+
+  if (
+    location.pathname === "/user" ||
+    location.pathname === "/user/orders" ||
+    location.pathname === "/user/carts" ||
+    location.pathname === "/user/settings"
+  ) {
+    if (isLogin === true && user.user.role === "user") {
+      return <Outlet />;
+    } else {
+      return <Navigate to="/login" replace />;
+    }
+  }
+  //After logout redirect to login page
   if (isLogin === false && location.pathname !== "/login") {
     return <Navigate to="/login" replace />;
   }
 
-  if (isLogin === true && location.pathname === "/login") {
-    return <Navigate to="/admin/dashboard" replace />;
+  if (isLogin === true) {
+    if (user.user.role === "admin")
+      return <Navigate to="/admin/dashboard" replace />;
+    else return <Navigate to="/" replace />;
   }
 
   return <Outlet />;

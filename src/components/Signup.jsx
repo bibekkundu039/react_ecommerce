@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import { useAuth } from "../zustand/useAuth";
 
 const schema = Yup.object({
+  fullname: Yup.string().required("Full name is required"),
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required")
@@ -24,18 +25,22 @@ const schema = Yup.object({
       /[@$!%*?&]/,
       "Password must contain at least one special character"
     ),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .required("Confirm Password is required"),
 });
 
-const Login = () => {
-  const { login } = useAuth();
+const Signup = () => {
+  const { signup } = useAuth();
 
   const formik = useFormik({
     initialValues: {
+      fullname: "",
       email: "",
       password: "",
     },
     validationSchema: schema,
-    onSubmit: login,
+    onSubmit: signup,
   });
 
   return (
@@ -46,10 +51,30 @@ const Login = () => {
           className="rounded-l-lg object-cover"
         />
         <div className="flex flex-col justify-center px-10 gap-6">
-          <h1 className="text-gray-700 text-2xl font-semibold">Sign in</h1>
+          <h1 className="text-gray-700 text-2xl font-semibold">
+            Create an account
+          </h1>
           <form
             className="flex flex-col justify-between gap-3"
             onSubmit={formik.handleSubmit}>
+            <div className="flex flex-col gap-1 ">
+              <label
+                className="block text-sm text-gray-800 font-semibold"
+                htmlFor="fullname">
+                Full Name
+              </label>
+              <input
+                type="text"
+                id="fullname"
+                name="fullname"
+                onChange={formik.handleChange}
+                placeholder="example@mail.com"
+                className="w-full text-sm border border-gray-300 p-2 rounded"
+              />
+              {formik.errors.fullname && (
+                <small className="text-red-500">{formik.errors.fullname}</small>
+              )}
+            </div>
             <div className="flex flex-col gap-1 ">
               <label
                 className="block text-sm text-gray-800 font-semibold"
@@ -86,11 +111,31 @@ const Login = () => {
                 <small className="text-red-500">{formik.errors.password}</small>
               )}
             </div>
+            <div className="flex flex-col gap-1 ">
+              <label
+                className="block text-sm text-gray-800 font-semibold"
+                htmlFor="confirmPassword">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                onChange={formik.handleChange}
+                placeholder="*********"
+                className="w-full text-sm border border-gray-300 p-2 rounded"
+              />
+              {formik.errors.confirmPassword && (
+                <small className="text-red-500">
+                  {formik.errors.confirmPassword}
+                </small>
+              )}
+            </div>
             <button
               type="submit"
               className="w-full text-sm font-semibold bg-[#13B77F] text-white p-2 cursor-pointer
               hover:bg-[#0f9b5b] rounded">
-              Login
+              Sign Up
             </button>
           </form>
 
@@ -102,8 +147,8 @@ const Login = () => {
               </Link>
             </p>
             <p className="text-sm text-gray-500">
-              <Link to="#" className="text-[#13B77F] font-semibold">
-                Forgot Password?
+              <Link to="/login" className="text-[#13B77F] font-semibold">
+                Already have an account? Login
               </Link>
             </p>
           </div>
@@ -113,4 +158,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
