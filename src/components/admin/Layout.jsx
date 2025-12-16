@@ -15,16 +15,17 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import { Dropdown, Avatar, Badge, Popconfirm } from "antd";
-import { href, Link, Outlet } from "react-router-dom";
+import { href, Link, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../../zustand/useAuth";
 
 const Layout = () => {
   const [space, setSpace] = useState(270);
   const { logout } = useAuth();
+  const location = useLocation();
   const items = [
     {
       key: "1",
-      label: "Dashboard",
+      label: <Link to="/admin/dashboard">Dashboard</Link>,
       icon: <LayoutDashboard className="size-4" />,
     },
     {
@@ -32,12 +33,20 @@ const Layout = () => {
     },
     {
       key: "settings",
-      label: "Settings",
+      label: <Link to="/admin/settings">Settings</Link>,
       icon: <Settings className="size-4" />,
     },
     {
       key: "2",
-      label: "Logout",
+      label: (
+        <Popconfirm
+          title="Are you sure you want to logout?"
+          onConfirm={logout}
+          okText="Yes"
+          cancelText="No">
+          Logout
+        </Popconfirm>
+      ),
       icon: <LogOut className="size-4" />,
     },
   ];
@@ -87,8 +96,11 @@ const Layout = () => {
           {menus.map((menu, index) => (
             <Link key={index} to={menu.href}>
               <button
-                className="w-full rounded py-2 flex items-center px-2 gap-3 text-gray-600 font-medium cursor-pointers 
-            hover:text-gray-800 hover:bg-gray-300 active:scale-95 duration-300 cursor-pointer">
+                className={`w-full rounded py-2 flex items-center px-2 gap-3 text-gray-600 font-medium cursor-pointers 
+            hover:text-gray-800 hover:bg-gray-300 active:scale-95 duration-300 cursor-pointer
+            ${
+              location.pathname === menu.href ? "bg-gray-100 text-gray-800" : ""
+            } `}>
                 {menu.icon}
                 {menu.label}
               </button>
@@ -139,6 +151,15 @@ const Layout = () => {
           </div>
         </div>
         <div className="px-12 py-8">
+          <div className="flex gap-2 mb-2 items-center">
+            <button className="size-8 rounded-full text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex justify-center items-center">
+              {menus.find((menu) => menu.href === location.pathname)?.icon}
+            </button>
+
+            <h1 className="text-2xl font-bold capitalize">
+              {location.pathname.split("/").pop()}
+            </h1>
+          </div>
           <Outlet />
         </div>
       </section>

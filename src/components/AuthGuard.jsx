@@ -10,13 +10,16 @@ const AuthGuard = () => {
   const location = useLocation();
   console.log("AuthGuard rendered");
   const [isLogin, setIsLogin] = useState(null);
+  // const [role, setRole] = useState(null);
   const user = useAuth(); // Placeholder for actual auth logic
 
   const checkToken = async (token) => {
     try {
       await axios.post("/auth/verify", { token });
+      // setRole(data.role);
       setIsLogin(true);
     } catch (error) {
+      // setRole(null);
       setIsLogin(false);
       console.error("Token validation failed:", error);
     }
@@ -42,18 +45,22 @@ const AuthGuard = () => {
     return <Outlet />;
   }
 
-  if (
-    location.pathname === "/user" ||
-    location.pathname === "/user/orders" ||
-    location.pathname === "/user/carts" ||
-    location.pathname === "/user/settings"
-  ) {
+  if (location.pathname.startsWith("/user")) {
     if (isLogin === true && user.user.role === "user") {
       return <Outlet />;
     } else {
       return <Navigate to="/login" replace />;
     }
   }
+
+  if (location.pathname.startsWith("/admin")) {
+    if (isLogin === true && user.user.role === "admin") {
+      return <Outlet />;
+    } else {
+      return <Navigate to="/login" replace />;
+    }
+  }
+
   //After logout redirect to login page
   if (isLogin === false && location.pathname !== "/login") {
     return <Navigate to="/login" replace />;

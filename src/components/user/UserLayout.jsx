@@ -24,12 +24,20 @@ const UserLayout = () => {
   const items = [
     {
       key: "settings",
-      label: "Settings",
+      label: <Link to="/user/settings">Settings</Link>,
       icon: <Settings className="size-4" />,
     },
     {
       key: "2",
-      label: "Logout",
+      label: (
+        <Popconfirm
+          title="Are you sure you want to logout?"
+          onConfirm={logout}
+          okText="Yes"
+          cancelText="No">
+          Logout
+        </Popconfirm>
+      ),
       icon: <LogOut className="size-4" />,
     },
   ];
