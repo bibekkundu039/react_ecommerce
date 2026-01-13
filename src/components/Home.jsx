@@ -7,12 +7,20 @@ import { Button, Card, Popconfirm, Tag, Tooltip } from "antd";
 import { Edit2, ShoppingCart, Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
 import { httpRequest } from "../lib/http-request";
+import { useAuth } from "../zustand/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { data, error, isLoading } = useSWR("products", fetcher);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const addToCart = async (id) => {
     try {
+      if (!user || user.role !== "user") {
+        navigate("/login");
+        return;
+      }
       const { data } = await httpRequest.post("/cart", { product: id });
       console.log(data);
       toast.success(data.message);
