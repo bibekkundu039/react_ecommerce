@@ -1,4 +1,4 @@
-import { Button, Card } from "antd";
+import { Button, Card, Popconfirm } from "antd";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import React from "react";
 import useSWR, { mutate } from "swr";
@@ -79,14 +79,17 @@ const UserCarts = () => {
                       <label>{cart.product.discount}% off</label>
                     </div>
 
-                    <Button
-                      className="mt-6"
-                      type="primary"
-                      danger
-                      icon={<Trash2 className="w-4 h-4" />}
-                      onClick={() => deleteCart(cart._id)}>
-                      Delete
-                    </Button>
+                    <Popconfirm
+                      title="Are you sure you want to delete?"
+                      onConfirm={() => deleteCart(cart._id)}>
+                      <Button
+                        className="mt-6"
+                        type="primary"
+                        danger
+                        icon={<Trash2 className="w-4 h-4" />}>
+                        Delete
+                      </Button>
+                    </Popconfirm>
                   </div>
                 </div>
 

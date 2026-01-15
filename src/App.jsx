@@ -18,12 +18,19 @@ import UserLayout from "./components/user/UserLayout";
 import UserCarts from "./components/user/Carts";
 import UserOrders from "./components/user/UserOrders";
 import UserSettings from "./components/user/UserSettings";
+import MainLayout from "./components/MainLayout";
 
 const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Home />,
+      element: <MainLayout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+      ],
     },
     {
       element: <AuthGuard />,
